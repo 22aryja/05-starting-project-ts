@@ -1,25 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Header from "./components/Header";
+import GreenRectangle from "./components/GreenRectangle";
+import Results from "./components/Results";
+import { useState, createContext } from "react";
+
+export type Inputs = {
+  initialInvestment: number;
+  annualInvestment: number;
+  expectedReturn: number;
+  duration: number;
+};
+
+type ContextValue = {
+  inputs: Inputs;
+  setInputs: (inputs: Inputs) => void; //gpt помог
+};
+
+export let MyContext = createContext<ContextValue>({
+  //gpt
+  inputs: {
+    initialInvestment: 10000,
+    annualInvestment: 1200,
+    expectedReturn: 6,
+    duration: 10,
+  },
+  setInputs: () => {},
+});
 
 function App() {
+  const [inputs, setInputs] = useState<Inputs>({
+    initialInvestment: 10000,
+    annualInvestment: 1200,
+    expectedReturn: 6,
+    duration: 10,
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <MyContext.Provider value={{ inputs, setInputs }}>
+      <Header />
+      <GreenRectangle />
+      <Results />
+    </MyContext.Provider>
   );
 }
 
